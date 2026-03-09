@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hemmeligheten under byen</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#1a1208; --paper:#f4edd8; --aged:#e8d9b5; --accent:#8b1a1a; --shadow:#3d2b1f; --highlight:#c9a84c; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--ink); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:2rem 1rem; font-family:'Courier Prime',monospace; }
+  .notebook { background:var(--paper); background-image:repeating-linear-gradient(transparent,transparent 27px,rgba(150,120,80,0.18) 27px,rgba(150,120,80,0.18) 28px); max-width:680px; width:100%; border-radius:3px; box-shadow:-6px 0 0 #c8b89a,6px 6px 30px rgba(0,0,0,0.7),12px 12px 60px rgba(0,0,0,0.4); padding:3.5rem 3rem 3rem 4rem; position:relative; min-height:520px; }
+  .notebook::before { content:''; position:absolute; left:3rem; top:0; bottom:0; width:2px; background:rgba(139,26,26,0.35); }
+  .holes { position:absolute; left:-18px; top:0; bottom:0; width:18px; display:flex; flex-direction:column; justify-content:space-around; padding:2rem 0; }
+  .hole { width:14px; height:14px; background:var(--ink); border-radius:50%; border:2px solid #5a4a3a; }
+  .chapter-tag { font-family:'Playfair Display',serif; font-size:0.72rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--accent); margin-bottom:0.5rem; opacity:0.8; }
+  h1.title { font-family:'Playfair Display',serif; font-size:2rem; color:var(--shadow); line-height:1.2; margin-bottom:2rem; border-bottom:2px solid var(--highlight); padding-bottom:0.75rem; }
+  .scene { display:none; animation:fadeIn 0.6s ease; }
+  .scene.active { display:block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .prose { font-size:1.05rem; line-height:1.9; color:var(--shadow); margin-bottom:1.4rem; }
+  .prose em { font-style:italic; color:var(--accent); }
+  .prose strong { font-weight:700; font-family:'Playfair Display',serif; }
+  .choices { display:flex; flex-direction:column; gap:0.75rem; margin-top:1.5rem; }
+  .choice-btn { background:transparent; border:2px solid var(--shadow); color:var(--shadow); font-family:'Courier Prime',monospace; font-size:0.95rem; padding:0.85rem 1.2rem; text-align:left; cursor:pointer; transition:all 0.2s ease; line-height:1.5; }
+  .choice-btn::before { content:'▶ '; color:var(--accent); font-size:0.7em; display:inline-block; transition:transform 0.2s; }
+  .choice-btn:hover { background:var(--shadow); color:var(--paper); border-color:var(--shadow); transform:translateX(4px); }
+  .choice-btn:hover::before { color:var(--highlight); transform:translateX(2px); }
+  .end-label { display:inline-block; font-family:'Playfair Display',serif; font-size:0.78rem; letter-spacing:0.2em; text-transform:uppercase; background:var(--accent); color:var(--paper); padding:0.3rem 0.7rem; margin-bottom:1.2rem; }
+  .restart-btn { margin-top:2rem; background:var(--accent); color:var(--paper); border:none; font-family:'Courier Prime',monospace; font-size:0.95rem; padding:0.85rem 1.8rem; cursor:pointer; letter-spacing:0.08em; transition:background 0.2s; }
+  .restart-btn:hover { background:var(--shadow); }
+  .progress-bar { position:absolute; top:0; left:0; right:0; height:3px; background:var(--aged); border-radius:3px 3px 0 0; overflow:hidden; }
+  .progress-fill { height:100%; background:var(--highlight); transition:width 0.5s ease; }
+  .scene-number { position:absolute; top:1.2rem; right:1.5rem; font-size:0.75rem; color:rgba(61,43,31,0.4); font-family:'Playfair Display',serif; font-style:italic; }
+  blockquote { border-left:3px solid var(--highlight); padding:0.5rem 1rem; margin:1rem 0 1.4rem; font-style:italic; color:#5a4030; background:rgba(201,168,76,0.07); }
+</style>
+</head>
+<body>
+<div class="notebook">
+  <div class="holes"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="scene-number" id="sceneNum">Scene 1 / 6</div>
+  <div class="chapter-tag">Interaktiv fortelling</div>
+  <h1 class="title">Hemmeligheten<br>under byen</h1>
+
+  <div class="scene active" id="s1">
+    <p class="prose">Det er tirsdag kveld og du jobber overtid i kommunearkivet. Alle andre har gått hjem. Fluorescerende lys flimrer over støvete hyller.</p>
+    <p class="prose">Du skal bare rydde hylle 7-C. Men bak en gammel eske finner du en <em>forseglet mappe</em> merket med rødt: <strong>«FORTROLIG — Grimstad 1987 — MÅ IKKE ÅPNES»</strong>.</p>
+    <p class="prose">Stemmen i hodet ditt sier du bør la den ligge. Hendene dine tenker annerledes. Du bryter seglet.</p>
+    <p class="prose">Inne i mappen: detaljerte tegninger av et hemmelig tunnelnettverk under byens drikkevannskilde — og en håndskrevet liste med navn. <em>Det øverste er din nåværende sjef.</em></p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s2a')">Du fotograferer alle dokumentene og legger mappen nøyaktig tilbake</button>
+      <button class="choice-btn" onclick="goTo('s2b')">Du tar mappen med deg hjem — dette er for viktig til å bli liggende her</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s2a">
+    <p class="prose">Du legger mappen tilbake og går hjem. Natten er lang. Du zoomer inn på bildene til øynene brenner.</p>
+    <p class="prose">Tunnelene ble aldri registrert offisielt. Tegningene viser <em>ventiler</em> koblet direkte til kommunens vannrør. Et brev fra 1987 avslutter med:</p>
+    <blockquote>«Ingen utenfor kretsen får vite om dette. Noensinne.»</blockquote>
+    <p class="prose">Neste morgen: en melding fra sjefen. <strong>«Vi må snakke. Mitt kontor. 08.00.»</strong> Arkivets overvåkingskamera blinket mens du tok bildene.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s3a')">Du bruker timen som er igjen til å grave frem mer — hvert eneste navn på listen</button>
+      <button class="choice-btn" onclick="goTo('s3b')">Du drar rett til møtet — du vil høre hva sjefen sier før du viser kortene dine</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s2b">
+    <p class="prose">Hjem. Dør låst. Mappen på kjøkkenbordet. Du leser i fem timer.</p>
+    <p class="prose">Tunnelene ble brukt til <em>ulovlig dumping av industrikjemikalier</em> på 80-tallet — finansiert av lokalpolitikere. Drikkevann. Barn. Tiår med taushet.</p>
+    <p class="prose">Klokken 02.14 hører du noen prøve dørhåndtaket ditt. Stopper. Begynner igjen. Stopper. Ti minutter. Ingenting mer.</p>
+    <p class="prose">Men nå vet du: <em>noen vet at du vet.</em></p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s3c')">Du gjemmer mappen i kjelleren og later som ingenting neste dag på jobb</button>
+      <button class="choice-btn" onclick="goTo('s3d')">Du pakker en bag og stikker til vennen din Kristian — du kan ikke bli her</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s3a">
+    <p class="prose">Du slår opp hvert navn. Pensjonerte politikere. En avdød ingeniør. En som fortsatt sitter i kommunestyret. Og én du ikke forventet: <em>kommunedirektøren selv.</em></p>
+    <p class="prose">Tunnelene ble finansiert med midler merket «infrastrukturvedlikehold». Ingen stilte noensinne spørsmål.</p>
+    <p class="prose">Klokken 07.58 går du inn møterommet. Sjefen din ser ut som en mann som ikke har sovet på tretti år.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s4a')">Du legger bildene på bordet og sier: «Jeg vet alt. Hva skjer nå?»</button>
+      <button class="choice-btn" onclick="goTo('s4b')">Du later som ingenting — du vil høre alt han vet før du sier noe</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s3b">
+    <p class="prose">Møterommet er kaldt. Sjefen sitter med ryggen til vinduet. En mann du ikke kjenner sitter i hjørnet — presenterer seg ikke.</p>
+    <p class="prose"><em>«Vi vet du tok bilder i arkivet i går kveld. Vi trenger at du leverer inn telefonen og sletter alt. I bytte: lønnsøkning og ny tittel.»</em></p>
+    <p class="prose">Mannen i hjørnet ser på klokken sin. Det er ikke et vanlig ur.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s4c')">Du later som du godtar — men leverer en gammel reservetelefon, ikke din egen</button>
+      <button class="choice-btn" onclick="goTo('s4d')">Du sier rett ut nei og reiser deg for å gå</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s3c">
+    <p class="prose">Kjelleren lukter mugg og gammel betong. Du løfter en løs plate, legger mappen under, dekker til.</p>
+    <p class="prose">Dagen etter er leiligheten rotet gjennom. Nøye — men ikke nøye nok. Et støvavtrykk ved vinduskarmen. <em>Profesjonelle.</em></p>
+    <p class="prose">En lapp på kjøkkenbenken:</p>
+    <blockquote>«Vi leter etter noe som tilhører oss. Lever det tilbake. Ingen spørsmål.»</blockquote>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s4e')">Du sender bildene anonymt til en journalist via en midlertidig e-post</button>
+      <button class="choice-btn" onclick="goTo('s4f')">Du tar mappen fra kjelleren og går rett til politistasjonen</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s3d">
+    <p class="prose">Kristian åpner døren uten spørsmål. Kaffe på bordet før du har sagt et ord. Du forteller alt.</p>
+    <p class="prose">Han leser gjennom dokumentene sakte. Ser opp: <em>«Vi kan ikke gjøre dette alene. Men vi kan velge hvem vi stoler på.»</em></p>
+    <p class="prose">Han åpner laptopen. <em>«Jeg kjenner en journalist i Aftenposten. Og en jurist som spesialiserer seg på varsling. Hvem kontakter vi?»</em></p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s4g')">Journalisten — saken må ut i offentligheten så fort som mulig</button>
+      <button class="choice-btn" onclick="goTo('s4h')">Juristen — du trenger juridisk beskyttelse før du sier noe som helst</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s4a">
+    <p class="prose">Sjefen stirrer på bildene. Hendene skjelver lett. Så sukker han — et tungt, gammelt sukk.</p>
+    <p class="prose"><em>«Jeg visste dette ville komme. Jeg var ung. Jeg var feig. Jeg sa ikke nei da jeg burde.»</em></p>
+    <p class="prose">Han forteller om presset, pengene, løftene om at ingen ville ta skade. Løgner han fortalte seg selv i årevis. Til slutt: <em>«Jeg vil bidra til å rydde opp. La meg gjøre det på riktig måte.»</em></p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s5a')">Du stoler på ham — dere lager plan om å gå til statsadvokaten sammen</button>
+      <button class="choice-btn" onclick="goTo('s5b')">Du stoler ikke — du sender bildene til Marte idet du forlater møterommet</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s4b">
+    <p class="prose">Sjefen snakker forsiktig. Han tror du ikke vet noe. Han sier at «arkivet skal gjennomgås» og at «visse eldre dokumenter vil makuleres av sikkerhetsgrunner».</p>
+    <p class="prose">Du nikker. Du sier lite. Du noterer alt i hodet.</p>
+    <p class="prose">Makulering. <em>De vet nøyaktig hva som er der inne.</em> Du har kanskje 24 timer før bevisene er borte for alltid.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s5c')">Du sender bildene til en journalist sekunder etter at du er ute av bygget</button>
+      <button class="choice-btn" onclick="goTo('s5d')">Du snur og går tilbake til arkivet — du vil ha det fysiske originaldokumentet</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s4c">
+    <p class="prose">Du leverer reservetelefonen. Han ser ikke engang på den — gir den til mannen i hjørnet som legger den i en mappe.</p>
+    <p class="prose">Du går ut. Rolig. Ned trappen. Rundt hjørnet ringer du Marte — en gravejournalist du fant i en gammel artikkel om miljøskandaler. Hun svarer på første ring.</p>
+    <p class="prose"><em>«Jeg har ventet på noen som deg i årevis.»</em></p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s5e')">Dere møtes på kafé — du gir henne alt: bilder, navn, hele historien</button>
+      <button class="choice-btn" onclick="goTo('s5f')">Du sender henne bildene digitalt og ber henne vente til du er i sikkerhet</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s4d">
+    <p class="prose">Du reiser deg. Mannen i hjørnet reiser seg også. Sjefen løfter hånden stille: <em>«La ham gå.»</em></p>
+    <p class="prose">Ute på gaten. Hjertet hamrer. Du begynner å gå fort. Ingen følger etter. Ennå.</p>
+    <p class="prose">Du har bildene. Du er alene. Og du har nettopp sagt nei til folk som ikke er vant til å høre det.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s5g')">Du skriver en detaljert anmeldelse og sender alt til Riksrevisjonen</button>
+      <button class="choice-btn" onclick="goTo('s5c')">Du finner en kafé med wifi og sender bildene til tre ulike redaksjoner</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s4e">
+    <p class="prose">Du oppretter en midlertidig e-post på et bibliotek. Sender alle bildene. Ingen avsender. Ingen spor.</p>
+    <p class="prose">Tre dager. Ingenting. En uke. Ingenting. Så — en lørdag morgen — en liten notis bakerst i lokalavisen:</p>
+    <blockquote>«Kommunen bekrefter at tunneler fra 1980-tallet vil kartlegges etter tips til redaksjonen.»</blockquote>
+    <p class="prose">Det er i gang. Sakte — men det er i gang. Ingen vet at det var deg.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s5h')">Du sender mer dokumentasjon anonymt — trykket må holdes oppe</button>
+      <button class="choice-btn" onclick="goTo('s5i')">Du bestemmer deg for å stå frem med navn og ansikt</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s4f">
+    <p class="prose">Politistasjonen. En betjent blar i mappen som om det er en uåpnet regning. Du venter nesten to timer.</p>
+    <p class="prose">En etterforsker kommer til slutt. Leser. Ser opp. <em>«Vet du at én av navnene her er min tidligere seksjonsleder?»</em></p>
+    <p class="prose">Han lukker mappen. <em>«Gå rett til statsadvokaten. Ikke vis dette til noen andre her inne.»</em></p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s5j')">Du takker ham og tar neste buss til statsadvokaten</button>
+      <button class="choice-btn" onclick="goTo('s5c')">Du stoler ikke på systemet lenger — du går til pressen i stedet</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s4g">
+    <p class="prose">Journalisten heter Erik. Han er gammel og grundig og redd for ingenting. Leser gjennom alt på én time og sier bare: <em>«Dette er stort.»</em></p>
+    <p class="prose">Han vil ha originaldokumentene. Han vil ha deg til å stille opp med navn. Han vil kjøre saken på søndag — forsiden.</p>
+    <p class="prose">Du tenker på familien. Jobben. Og så tenker du på barna som drakk det vannet.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s5i')">Du sier ja — navn, ansikt, hele historien</button>
+      <button class="choice-btn" onclick="goTo('s5h')">Du ber ham kjøre saken uten å nevne deg — kildebeskyttelse</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s4h">
+    <p class="prose">Juristen heter Amina. Hun møter dere klokken syv om morgenen, etter å ha lest dokumentene Kristian sendte over natten.</p>
+    <p class="prose"><em>«Du er lovlig beskyttet som varsler. Men beskyttelsen er sterkest hvis du anmelder formelt før saken lekker på annen måte.»</em></p>
+    <p class="prose">Hun legger frem tre veier: statsadvokaten, Arbeidstilsynet, eller pressen med henne som juridisk rygge dekning.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s5j')">Du velger statsadvokaten — den formelle, trygge veien</button>
+      <button class="choice-btn" onclick="goTo('s5i')">Du velger pressen, med Amina ved siden av deg</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s5a">
+    <p class="prose">Dere lager en plan. Han kontakter statsadvokaten selv, med deg som medvarsler. Han vil legge frem alt han vet — mer enn det som er i mappen.</p>
+    <p class="prose">Det er en risiko. Men han ser deg i øynene med noe som likner lettelse. <em>Som om han endelig kan legge ned en byrde han har båret i tiår.</em></p>
+    <p class="prose">Tre uker etter sitter dere begge i et møterom hos statsadvokaten. Mappen er på bordet. Sannheten er i rommet.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('end-rettferd')">Etterforskningen åpnes. Du holder deg stille og lar systemet arbeide.</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s5b">
+    <p class="prose">Du trykker send mens du fremdeles er i heisen. Bildene. Navnene. Alt til Marte.</p>
+    <p class="prose">To timer etter: en melding fra sjefen. <em>«Jeg skjønner hva du valgte. Jeg tror det var riktig.»</em></p>
+    <p class="prose">Neste dag bekrefter han historien overfor pressen. Han gråter lett i kameraet og sier han burde sagt noe for lenge siden.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s6-frem')">Dere stiller begge opp og forteller historien til landet</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s5c">
+    <p class="prose">Bildene er sendt til tre redaksjoner. Backup på to epostadresser. Du puster ut for første gang på dager.</p>
+    <p class="prose">Innen 48 timer har én redaksjon bekreftet historien mot andre kilder. Innen 72 timer er saken live — bilder, kart, fullstendig navneliste.</p>
+    <p class="prose">Telefonen din ringer uavbrutt. Et ukjent nummer ringer 17 ganger. Du tar det ikke.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s6-frem')">Du stiller opp i intervju og forteller alt — fra hylle 7-C til i dag</button>
+      <button class="choice-btn" onclick="goTo('s6-anon')">Du holder deg skjult og lar saken leve sitt eget liv</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s5d">
+    <p class="prose">Du snur i korridoren. Arkivdøren er låst — nytt låsesystem, installert i løpet av natten.</p>
+    <p class="prose">En renholder ser på deg. <em>«De var her fra seks i morges,»</em> sier hun lavt. <em>«Tre menn med kofferter. Kjørte ut rundt åtte.»</em></p>
+    <p class="prose">Du kjenner noe kaldere enn frykt. <em>Lettelse.</em> Bildene på telefonen er det eneste som er igjen — og det holder.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s5c')">Du sender bildene fra taxien mens du forlater bygget</button>
+      <button class="choice-btn" onclick="goTo('s5j')">Du drar til statsadvokaten med renholderens navn som ekstra vitne</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s5e">
+    <p class="prose">Kaféen er full. Marte sitter i hjørnet med notatblokk. Du gir henne alt. Hun leser. Nikker. Nikker igjen.</p>
+    <p class="prose"><em>«Jeg trenger 48 timer til å dobbeltsjekke. Så kjører vi.»</em></p>
+    <p class="prose">48 timer etter: forsiden av Aftenposten. Tunnelkart. Fullstendige navn. Kommunedirektøren nekter kommentar.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s6-frem')">Du stiller opp i oppfølgingssaken med navn og ansikt</button>
+      <button class="choice-btn" onclick="goTo('s6-anon')">Du var anonym hele veien — og vil forbli det</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s5f">
+    <p class="prose">Marte bekrefter mottatt. Du sjekker inn på et billig hotell under brorens navn. Tre dager. Kontant.</p>
+    <p class="prose">På den fjerde dagen bryter saken. Marte har bekreftet mot to uavhengige arkivkilder. Tunnelene eksisterer. Navnene stemmer.</p>
+    <p class="prose">Du er trygg. Saken er ute. Herfra er det ikke mulig å stoppe den.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s6-anon')">Du forblir anonym og vender stille tilbake til livet ditt</button>
+      <button class="choice-btn" onclick="goTo('s6-frem')">Du ringer Marte: du vil stå frem — på dine egne premisser</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s5g">
+    <p class="prose">Riksrevisjonen bekrefter mottatt innen en time. Et saksnummer. Et løfte om grundig behandling.</p>
+    <p class="prose">Det tar tid. Mye tid. Men det er grundig. Hver krone. Hvert rør. Hvert navn.</p>
+    <p class="prose">Etter syv måneder offentliggjøres rapporten — 214 sider. Den begynner med et sitat fra en forseglet mappe fra 1987.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('end-rettferd')">Du leser alle 214 sidene. Alene. Stille. Med en kopp te.</button>
+      <button class="choice-btn" onclick="goTo('s6-frem')">Du ringer pressen — folk har krav på å vite hvem som startet dette</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s5h">
+    <p class="prose">Du sender mer. Budsjettdokumenter. En intern e-post fra 1989 der noen ber om «diskresjon rundt vannkildene».</p>
+    <p class="prose">Saken vokser for hver uke. Flere journalister plukker den opp. Et parti krever granskning. Et annet benekter alt.</p>
+    <p class="prose">Du er usynlig. Du er overalt. <em>Du er personen ingen vet at startet det hele.</em></p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s6-anon')">Du forblir anonym for alltid</button>
+      <button class="choice-btn" onclick="goTo('s6-frem')">Du bestemmer deg for å stå frem — sannheten fortjener et ansikt</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s5i">
+    <p class="prose">Du sier ja. Navnet ditt. Ansiktet ditt. Historien din.</p>
+    <p class="prose">Det er skummelt på en måte du ikke forventet — ikke fordi det er farlig lenger, men fordi det er <em>ekte.</em></p>
+    <p class="prose">Intervjuet sendes på nasjonal TV. Redaksjonen får inn over to hundre meldinger. En eldre mann fra Grimstad ringer og gråter og sier sønnen hans ble syk i 1991.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('s6-frem')">Du svarer på alle meldingene. Det tar to uker. Det er det viktigste du noensinne gjør.</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s5j">
+    <p class="prose">Statsadvokatens kontor er hvitt og stille og veldig offisielt. Du legger alt frem. Mappen. Bildene. Navnene.</p>
+    <p class="prose">Det tar to uker før noen kalles inn til avhør. Fire uker til det lekker til pressen. Seks uker til kommunedirektøren fratrer midlertidig.</p>
+    <p class="prose">Det er en langsom maskin, loven. Men den har begynt å bevege seg.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('end-rettferd')">Du holder deg i bakgrunnen og lar systemet gjøre jobben sin</button>
+      <button class="choice-btn" onclick="goTo('s6-frem')">Du bestemmer deg for å stå frem offentlig — folk fortjener å vite</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s6-frem">
+    <p class="prose">Ansiktet ditt er på forsiden. Navnet ditt er i historien. Du mister jobben innen en uke — og får tre nye jobbtilbud innen en måned.</p>
+    <p class="prose">Fem politikere tiltales. Tunnelene graves opp og kartlegges. Vannet friskmeldes til slutt. Men folk vet hva som skjedde. <em>De vil alltid vite.</em></p>
+    <p class="prose">En tirsdag kveld — nøyaktig ett år etter at du fant mappen — sitter du alene på kjøkkenet og henter et glass vann fra springen.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('end-frem')">Du drikker det sakte. Du tenker på dem det var for.</button>
+    </div>
+  </div>
+
+  <div class="scene" id="s6-anon">
+    <p class="prose">Saken ruller uten deg i sentrum. Journalister vinner priser. Politikere faller. Granskningskommisjoner nedsettes.</p>
+    <p class="prose">Ingen vet at det begynte med deg, på en tirsdag kveld, bak hylle 7-C.</p>
+    <p class="prose">Du lever det samme livet som før. Men du bærer noe nytt — en stille, privat visshet ingen kan ta fra deg.</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="goTo('end-anon')">Du finner fred i anonymiteten.</button>
+    </div>
+  </div>
+
+  <div class="scene" id="end-frem">
+    <div class="end-label">✦ Slutt — Sannheten med et ansikt</div>
+    <p class="prose">Det er det rene vannet. Det er ditt. Du kjempet for det.</p>
+    <p class="prose"><strong>Byen vet. Nå kan den begynne å heles.</strong></p>
+    <button class="restart-btn" onclick="restart()">↩ Les historien på nytt</button>
+  </div>
+
+  <div class="scene" id="end-anon">
+    <div class="end-label">✦ Slutt — Den usynlige</div>
+    <p class="prose">Du bærer en stille, privat visshet: <em>du så noe, og du gjorde noe med det.</em></p>
+    <p class="prose">Det trenger ikke et navn for å være sant. <strong>Du vet. Det er nok.</strong></p>
+    <button class="restart-btn" onclick="restart()">↩ Les historien på nytt</button>
+  </div>
+
+  <div class="scene" id="end-rettferd">
+    <div class="end-label">✦ Slutt — Den lange veien</div>
+    <p class="prose">Det tok lang tid. Måneder med venting, tvil, og kjedelige møter i grå kontorer. Advokater som snakket i paragrafer. Politikere som benektet alt til de ikke lenger kunne.</p>
+    <p class="prose">Men dommen falt. Du var i salen den dagen. Du hørte hammeren slå.</p>
+    <p class="prose">På vei ut stoppet en ukjent dame deg i døren: <em>«Min mann ble syk av det vannet. Takk for at du ikke ga opp.»</em></p>
+    <p class="prose"><strong>Rettferdighet er ikke alltid rask. Men den kom.</strong></p>
+    <button class="restart-btn" onclick="restart()">↩ Les historien på nytt</button>
+  </div>
+
+</div>
+
+<script>
+  const depths = {
+    's1':0,'s2a':12,'s2b':12,'s3a':22,'s3b':22,'s3c':22,'s3d':22,
+    's4a':34,'s4b':34,'s4c':34,'s4d':34,'s4e':34,'s4f':34,'s4g':34,'s4h':34,
+    's5a':50,'s5b':50,'s5c':50,'s5d':50,'s5e':50,'s5f':50,'s5g':50,'s5h':50,'s5i':50,'s5j':50,
+    's6-frem':72,'s6-anon':72,
+    'end-frem':100,'end-anon':100,'end-rettferd':100
+  };
+  const labels = {
+    's1':'Scene 1 / 6','s2a':'Scene 2 / 6','s2b':'Scene 2 / 6',
+    's3a':'Scene 3 / 6','s3b':'Scene 3 / 6','s3c':'Scene 3 / 6','s3d':'Scene 3 / 6',
+    's4a':'Scene 4 / 6','s4b':'Scene 4 / 6','s4c':'Scene 4 / 6','s4d':'Scene 4 / 6',
+    's4e':'Scene 4 / 6','s4f':'Scene 4 / 6','s4g':'Scene 4 / 6','s4h':'Scene 4 / 6',
+    's5a':'Scene 5 / 6','s5b':'Scene 5 / 6','s5c':'Scene 5 / 6','s5d':'Scene 5 / 6',
+    's5e':'Scene 5 / 6','s5f':'Scene 5 / 6','s5g':'Scene 5 / 6','s5h':'Scene 5 / 6',
+    's5i':'Scene 5 / 6','s5j':'Scene 5 / 6',
+    's6-frem':'Scene 6 / 6','s6-anon':'Scene 6 / 6',
+    'end-frem':'Slutt','end-anon':'Slutt','end-rettferd':'Slutt'
+  };
+  function goTo(id) {
+    document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
+    const t=document.getElementById(id);
+    if(!t)return;
+    t.classList.add('active');
+    document.querySelector('.notebook').scrollIntoView({behavior:'smooth',block:'start'});
+    document.getElementById('progressFill').style.width=(depths[id]??50)+'%';
+    document.getElementById('sceneNum').textContent=labels[id]||'';
+  }
+  function restart(){goTo('s1');}
+</script>
+</body>
+</html>
